@@ -1,70 +1,56 @@
-# Getting Started with Create React App
+# Create context object
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+```js
+import { createContext } from "react";
 
-## Available Scripts
+export default createContext("english"); // * default value and its fixed
+```
 
-In the project directory, you can run:
+## the idea is the pass props down to any child component not to the direct child.
 
-### `npm start`
+![react-context](prop-drilling-v-context.png)
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+### source of data
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+- Default value or we can provide object
 
-### `npm test`
+- context in class declares as a static property
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+### change the value of context
 
-### `npm run build`
+- we have to create a new provider component in the parent component
+- and pass the value to the child component
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+```js
+<contexts.Provider value={language}>
+  <UserCreate />
+</contexts.Provider>
+```
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+### get data from context
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+- we can use `useContext hook || this.context` or `Consumer component`
 
-### `npm run eject`
+```js
+class ClassName extends React.Component {
+  static contextType = MyContext;
+  render() {
+    return (
+      <div>
+        <h1>{this.context}</h1>
+      </div>
+    );
+  }
+}
+```
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+other method to use context
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+```js
+<LanguageContext.Consumer>
+  {(value) => (value === "english" ? "submits" : "ارسال")}
+</LanguageContext.Consumer>
+```
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+- Consumer to access multiple deferent context values but this is true when we use `class component`
+- in functional component we can use `useContext` hook to access multiple context value
